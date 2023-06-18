@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"sync"
-	"time"
 )
 
 // 实现所有接口
@@ -21,46 +20,47 @@ func (s s) C1() {}
 
 func (s s) B1() {}
 func main() {
-	//单例模式
-	//懒汉模式
-	lazySingleston := GetLazySingleston()
-	lazySingleston.print()
-	lazySingleston = GetLazySingleston()
-	//饿汉模式
-	hungrySingleston := GetHungrySingleston()
-	hungrySingleston.print()
-
-	//实现所有接口
-	var ss s
-	var a A = ss
-	a.C1()
-	//策略类
-	buyer := Buyer{}
-	buyer.SetStray(new(S1))
-	fmt.Println(buyer.Buy(100))
-	buyer.SetStray(new(S2))
-	fmt.Println(buyer.Buy(100))
-	//工厂模式
-	appleFactory := AppleFactory{}
-	apple := appleFactory.GetFruit()
-	apple.show()
-	//轮询打印无缓冲
-	c1, c2 := make(chan struct{}), make(chan struct{})
-	go func() {
-		for i := 0; i < 100; i++ {
-			fmt.Println("cat")
-			c1 <- struct{}{}
-			<-c2
-		}
-	}()
-	go func() {
-		for i := 0; i < 100; i++ {
-			<-c1
-			fmt.Println("dog")
-			c2 <- struct{}{}
-		}
-	}()
-	time.Sleep(time.Second)
+	//
+	////单例模式
+	////懒汉模式
+	//lazySingleston := GetLazySingleston()
+	//lazySingleston.print()
+	//lazySingleston = GetLazySingleston()
+	////饿汉模式
+	//hungrySingleston := GetHungrySingleston()
+	//hungrySingleston.print()
+	//
+	////实现所有接口
+	//var ss s
+	//var a A = ss
+	//a.C1()
+	////策略类
+	//buyer := Buyer{}
+	//buyer.SetStray(new(S1))
+	//fmt.Println(buyer.Buy(100))
+	//buyer.SetStray(new(S2))
+	//fmt.Println(buyer.Buy(100))
+	////工厂模式
+	//appleFactory := AppleFactory{}
+	//apple := appleFactory.GetFruit()
+	//apple.show()
+	////轮询打印无缓冲
+	//c1, c2 := make(chan struct{}), make(chan struct{})
+	//go func() {
+	//	for i := 0; i < 100; i++ {
+	//		fmt.Println("cat")
+	//		c1 <- struct{}{}
+	//		<-c2
+	//	}
+	//}()
+	//go func() {
+	//	for i := 0; i < 100; i++ {
+	//		<-c1
+	//		fmt.Println("dog")
+	//		c2 <- struct{}{}
+	//	}
+	//}()
+	//time.Sleep(time.Second)
 }
 
 // 策略模式
