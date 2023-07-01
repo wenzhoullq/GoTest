@@ -76,8 +76,10 @@ func (p *Pool) worker() {
 	for {
 		select {
 		case t := <-p.taskQueue:
-			t.task()
-			p.wg.Done()
+			{
+				t.task()
+				p.wg.Done()
+			}
 		case <-p.ctx.Done():
 			return
 		}
@@ -95,30 +97,31 @@ func (p *Pool) Close() {
 func main() {
 	pool := NewPool(3)
 	pool.Start()
-	wg := sync.WaitGroup{}
-	for j := 0; j < 100; j++ {
-		wg.Add(1)
+	for i := 0; i < 20; i++ {
+		k := i
 		go func() {
-			defer wg.Done()
 			tasks := make([]Task, 0)
-			for i := 0; i < 100; i++ {
+			for j := 0; j <= 100; j++ {
+				n := j
 				task := NewTask(func() {
-					fmt.Println("test")
+					fmt.Println("第", k, "组任务的第", n, "输出")
 				})
 				tasks = append(tasks, task)
 			}
 			err := pool.AddTasks(tasks)
 			if err != nil {
-				log.Println(err)
+				log.Println(err, "第", k, "组任务加入协程池失败")
+				return
 			}
+			fmt.Println("第", k, "组任务加入协程池")
 		}()
 	}
-	wg.Wait()
 	pool.Close()
 	tasks := make([]Task, 0)
 	for i := 0; i < 100; i++ {
+		n := i
 		task := NewTask(func() {
-			fmt.Println("test")
+			fmt.Println(n)
 		})
 		tasks = append(tasks, task)
 	}
