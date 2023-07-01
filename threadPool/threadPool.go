@@ -95,6 +95,26 @@ func (p *Pool) Close() {
 func main() {
 	pool := NewPool(3)
 	pool.Start()
+	wg := sync.WaitGroup{}
+	for j := 0; j < 100; j++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			tasks := make([]Task, 0)
+			for i := 0; i < 100; i++ {
+				task := NewTask(func() {
+					fmt.Println("test")
+				})
+				tasks = append(tasks, task)
+			}
+			err := pool.AddTasks(tasks)
+			if err != nil {
+				log.Println(err)
+			}
+		}()
+	}
+	wg.Wait()
+	pool.Close()
 	tasks := make([]Task, 0)
 	for i := 0; i < 100; i++ {
 		task := NewTask(func() {
@@ -103,11 +123,6 @@ func main() {
 		tasks = append(tasks, task)
 	}
 	err := pool.AddTasks(tasks)
-	if err != nil {
-		log.Println(err)
-	}
-	pool.Close()
-	err = pool.AddTasks(tasks)
 	if err != nil {
 		log.Println(err)
 	}
