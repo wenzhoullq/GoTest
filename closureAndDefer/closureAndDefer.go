@@ -34,7 +34,10 @@ func f2() {
 }
 
 func f3() {
-	arr := [6]int{1, 2, 3, 4, 5, 6}
+	arr := make([]int, 100000)
+	for i := 0; i < 100000; i++ {
+		arr[i] = i
+	}
 	//在低版本的go中,range 的v是一种值复制,严格来说这不是闭包
 	for _, v := range arr {
 		go func() {
@@ -44,7 +47,10 @@ func f3() {
 }
 
 func f4() {
-	arr := [6]int{1, 2, 3, 4, 5, 6}
+	arr := make([]int, 100000)
+	for i := 0; i < 100000; i++ {
+		arr[i] = i
+	}
 	//让go执行完休眠一会输出值为1,2,3,4,5,6...
 	for _, v := range arr {
 		go func() {
@@ -114,8 +120,9 @@ func main() {
 	//f0()
 	//f1()
 	//f2()
+	f3()
 	//f4()
-	f5()
+	//f5()
 	//fmt.Println("print value", f6())
 	//fmt.Println("print value", f7())
 	//f8()
