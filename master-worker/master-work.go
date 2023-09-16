@@ -7,7 +7,8 @@ import (
 	"time"
 )
 
-//master - work 工作模型 1、master负责分发计算任务，任务总数1000
+//master - work 工作模型
+//1、master负责分发计算任务，任务总数1000
 //2、每一个计算任务由master调起新的work协程，master退出前，必须通知所有work先退出，自己再退出
 //3、同时运行的work协程数不超过3个,work超时5s自动退出 4、work计算结果返回给master
 
