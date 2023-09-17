@@ -19,8 +19,9 @@ func main() {
 	}
 	ch := make(chan Cal, 3)
 	ans := 0
+	mu := sync.Mutex{}
 	wg := sync.WaitGroup{}
-	for i := 0; i < 50; i++ {
+	for i := 0; i < 5000; i++ {
 		ctx, cancel := context.WithCancel(context.Background())
 		ch <- cal
 		wg.Add(1)
@@ -30,8 +31,14 @@ func main() {
 			for {
 				select {
 				case f := <-ch:
-					time.Sleep(1 * time.Second) //用于模拟计算时间时间
-					ans += f(i)
+					time.Sleep(1 * time.Second) //用于模拟计算时间时
+					select {
+					case <-ctx.Done():
+					default:
+						mu.Lock()
+						ans += f(i)
+						mu.Unlock()
+					}
 					break out //一定要加break,不然无法退出
 				case <-ctx.Done():
 					break out
